@@ -3,7 +3,7 @@ package org.zalava.webfetch;
 import org.zalava.ProviderFactory;
 import org.zalava.ProviderFactoryContext;
 import org.zalava.ProviderFactoryDescriptor;
-import org.zalava.SeaProvider;
+import org.zalava.ZalavaProvider;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +25,7 @@ public final class WebFetchProviderFactory implements ProviderFactory {
     }
 
     @Override
-    public List<SeaProvider> createProviders(ProviderFactoryContext context) {
+    public List<ZalavaProvider> createProviders(ProviderFactoryContext context) {
         Map<String, Object> configuration = context == null ? Map.of() : context.configuration();
         return List.of(new WebFetchSeaProvider(FetchLimits.from(configuration)));
     }

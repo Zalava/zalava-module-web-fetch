@@ -4,10 +4,10 @@ import tools.jackson.databind.JsonNode;
 import org.zalava.InvocationContext;
 import org.zalava.ProviderCapabilities;
 import org.zalava.ProviderDescriptor;
-import org.zalava.SeaOperationResult;
-import org.zalava.SeaProvider;
-import org.zalava.SeaToolDescriptor;
-import org.zalava.SeaToolInputSchemas;
+import org.zalava.ZalavaOperationResult;
+import org.zalava.ZalavaProvider;
+import org.zalava.ZalavaToolDescriptor;
+import org.zalava.ZalavaToolInputSchemas;
 import org.jsoup.Jsoup;
 
 import java.io.ByteArrayOutputStream;
@@ -26,16 +26,16 @@ import java.util.Map;
 import java.util.Set;
 
 /** A read-only provider that fetches public textual HTTP(S) documents. */
-public final class WebFetchSeaProvider implements SeaProvider {
+public final class WebFetchSeaProvider implements ZalavaProvider {
 
     static final String TOOL_NAME = "webFetch";
     private static final Set<Integer> REDIRECT_STATUSES = Set.of(301, 302, 303, 307, 308);
-    private static final SeaToolDescriptor WEB_FETCH = new SeaToolDescriptor(
+    private static final ZalavaToolDescriptor WEB_FETCH = new ZalavaToolDescriptor(
             TOOL_NAME,
             "Fetch a public HTTP(S) document with strict redirect, timeout, size, and content-type limits.",
             false,
             List.of("sea_backed", "web-fetch", "network", "read-only"),
-            SeaToolInputSchemas.object(Map.of("url", SeaToolInputSchemas.string()), "url")
+            ZalavaToolInputSchemas.object(Map.of("url", ZalavaToolInputSchemas.string()), "url")
     );
 
     private final FetchLimits limits;
@@ -75,12 +75,12 @@ public final class WebFetchSeaProvider implements SeaProvider {
     }
 
     @Override
-    public List<SeaToolDescriptor> listTools() {
+    public List<ZalavaToolDescriptor> listTools() {
         return List.of(WEB_FETCH);
     }
 
     @Override
-    public SeaOperationResult callTool(String toolName, JsonNode arguments, InvocationContext context) {
+    public ZalavaOperationResult callTool(String toolName, JsonNode arguments, InvocationContext context) {
         if (!TOOL_NAME.equals(toolName)) {
             return failure("UNKNOWN_TOOL", "Unknown web fetch tool");
         }
@@ -102,7 +102,7 @@ public final class WebFetchSeaProvider implements SeaProvider {
         }
     }
 
-    private SeaOperationResult fetch(URI initial) throws IOException, InterruptedException {
+    private ZalavaOperationResult fetch(URI initial) throws IOException, InterruptedException {
         URI current = initial;
         for (int redirects = 0; ; redirects++) {
             HttpRequest request = HttpRequest.newBuilder(current)
@@ -141,7 +141,7 @@ public final class WebFetchSeaProvider implements SeaProvider {
                 return failure("RESPONSE_TOO_LARGE", "The response exceeded the configured byte limit");
             }
             String text = extract(contentType, body);
-            return new SeaOperationResult(true, Map.of(
+            return new ZalavaOperationResult(true, Map.of(
                     "url", current.toString(),
                     "contentType", normalizedContentType(contentType),
                     "text", text
@@ -202,8 +202,8 @@ public final class WebFetchSeaProvider implements SeaProvider {
         return (separator >= 0 ? contentType.substring(0, separator) : contentType).trim().toLowerCase(Locale.ROOT);
     }
 
-    private static SeaOperationResult failure(String code, String message) {
-        return new SeaOperationResult(false, Map.of("code", code, "message", message), Map.of("providerId", "web-fetch"));
+    private static ZalavaOperationResult failure(String code, String message) {
+        return new ZalavaOperationResult(false, Map.of("code", code, "message", message), Map.of("providerId", "web-fetch"));
     }
 
     private static void close(InputStream stream) {
