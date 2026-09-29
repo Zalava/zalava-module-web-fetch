@@ -18,9 +18,9 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import org.zalava.InvocationContext;
-import org.zalava.SeaOperationResult;
-import org.zalava.SeaProvider;
-import org.zalava.SeaToolDescriptor;
+import org.zalava.ZalavaOperationResult;
+import org.zalava.ZalavaProvider;
+import org.zalava.ZalavaToolDescriptor;
 import org.zalava.testing.ConfigFixture;
 import org.zalava.testing.ModuleContractKit;
 import org.zalava.testing.ProviderFixture;
@@ -117,13 +117,13 @@ class WebFetchSeaModuleTest {
     @Test
     void createsTheConfiguredProviderAndDeclaresItsReadOnlyTool() {
         try (ProviderFixture providers = kit.providers(ConfigFixture.empty())) {
-            SeaProvider provider = providers.requireProvider(PROVIDER_ID);
+            ZalavaProvider provider = providers.requireProvider(PROVIDER_ID);
             assertThat(provider.descriptor().moduleId()).isEqualTo(MODULE_ID);
             assertThat(provider.descriptor().providerType()).isEqualTo("web-fetch");
             assertThat(provider.descriptor().policyTags()).contains("read-only");
-            assertThat(provider.listTools().stream().map(SeaToolDescriptor::name)).containsExactly(TOOL_NAME);
+            assertThat(provider.listTools().stream().map(ZalavaToolDescriptor::name)).containsExactly(TOOL_NAME);
 
-            SeaToolDescriptor tool = providers.requireTool(PROVIDER_ID, TOOL_NAME);
+            ZalavaToolDescriptor tool = providers.requireTool(PROVIDER_ID, TOOL_NAME);
             assertThat(tool.sideEffecting()).isFalse();
             assertThat(tool.inputSchema())
                     .containsEntry("type", "object")
@@ -149,7 +149,7 @@ class WebFetchSeaModuleTest {
 
     @Test
     void fetchesPlainTextAndReportsBoundedMetadata() throws Exception {
-        SeaOperationResult result = fetch(provider(Map.of()), "/text");
+        ZalavaOperationResult result = fetch(provider(Map.of()), "/text");
 
         assertThat(result.success()).isTrue();
         assertThat(content(result))
@@ -171,7 +171,7 @@ class WebFetchSeaModuleTest {
     void followsOnlyTheConfiguredNumberOfValidatedRedirects() throws Exception {
         assertThat(fetch(provider(Map.of()), "/redirect").success()).isTrue();
 
-        SeaOperationResult loop = fetch(provider(Map.of("maxRedirects", 1)), "/loop");
+        ZalavaOperationResult loop = fetch(provider(Map.of("maxRedirects", 1)), "/loop");
         assertThat(loop.success()).isFalse();
         assertThat(content(loop)).containsEntry("code", "REDIRECT_LIMIT");
     }
@@ -186,7 +186,7 @@ class WebFetchSeaModuleTest {
 
     @Test
     void returnsStableFailuresForInvalidUrlAndUnknownTool() throws Exception {
-        SeaProvider provider = provider(Map.of());
+        ZalavaProvider provider = provider(Map.of());
 
         assertThat(content(provider.callTool(
                 TOOL_NAME, arguments().put("url", "file:///etc/passwd"), InvocationContext.system())))
@@ -200,7 +200,7 @@ class WebFetchSeaModuleTest {
      * Builds the real provider from the built JAR and replaces only its address-policy collaborator
      * with a test double, so the loopback fixture is reachable without encoding that policy here.
      */
-    private SeaProvider provider(Map<String, Object> limits) throws ReflectiveOperationException {
+    private ZalavaProvider provider(Map<String, Object> limits) throws ReflectiveOperationException {
         ClassLoader loader = kit.module().getClass().getClassLoader();
         Class<?> limitsType = Class.forName(FETCH_LIMITS_TYPE, true, loader);
         Method from = limitsType.getDeclaredMethod("from", Map.class);
@@ -230,7 +230,7 @@ class WebFetchSeaModuleTest {
         Constructor<?> constructor =
                 providerType.getDeclaredConstructor(limitsType, HttpClient.class, resolverType);
         constructor.setAccessible(true);
-        return (SeaProvider) constructor.newInstance(fetchLimits, httpClient(), resolver);
+        return (ZalavaProvider) constructor.newInstance(fetchLimits, httpClient(), resolver);
     }
 
     private static HttpClient httpClient() {
@@ -240,7 +240,7 @@ class WebFetchSeaModuleTest {
                 .build();
     }
 
-    private SeaOperationResult fetch(SeaProvider provider, String path) {
+    private ZalavaOperationResult fetch(ZalavaProvider provider, String path) {
         return provider.callTool(TOOL_NAME, arguments().put("url", url(path)), InvocationContext.system());
     }
 
@@ -257,7 +257,7 @@ class WebFetchSeaModuleTest {
     }
 
     @SuppressWarnings("unchecked")
-    private static Map<String, Object> content(SeaOperationResult result) {
+    private static Map<String, Object> content(ZalavaOperationResult result) {
         return (Map<String, Object>) result.content();
     }
 

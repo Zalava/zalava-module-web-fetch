@@ -3,14 +3,14 @@ package org.zalava.webfetch;
 import org.zalava.ModuleConfigurationDescriptor;
 import org.zalava.ModuleDescriptor;
 import org.zalava.ProviderFactory;
-import org.zalava.SeaModule;
+import org.zalava.ZalavaModule;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 /** SEA module entry point for bounded, read-only web fetching. */
-public final class WebFetchSeaModule implements SeaModule {
+public final class WebFetchSeaModule implements ZalavaModule {
 
     public static final String MODULE_ID = "zalava-module-web-fetch";
     static final String VERSION = moduleVersion();
