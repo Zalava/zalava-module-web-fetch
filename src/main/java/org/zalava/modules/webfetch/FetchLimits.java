@@ -1,4 +1,4 @@
-package org.zalava.webfetch;
+package org.zalava.modules.webfetch;
 
 import java.time.Duration;
 import java.util.Map;
