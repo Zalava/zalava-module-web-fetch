@@ -1,4 +1,4 @@
-package org.zalava.webfetch;
+package org.zalava.modules.webfetch;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -9,7 +9,7 @@ import java.net.http.*;
 import java.time.Duration;
 import java.util.*;
 import org.junit.jupiter.api.Test;
-import org.zalava.InvocationContext;
+import org.zalava.api.InvocationContext;
 import tools.jackson.databind.json.JsonMapper;
 
 class WebFetchBoundaryTest {
@@ -49,12 +49,26 @@ class WebFetchBoundaryTest {
             "http://unknown.test")) assertCode(provider, url, "INVALID_URL");
     assertThat(
             provider
-                .callTool("unknown", JSON.createObjectNode(), InvocationContext.system())
+                .callTool(
+                    "unknown",
+                    new tools.jackson.databind.json.JsonMapper()
+                        .convertValue(
+                            JSON.createObjectNode(),
+                            new tools.jackson.core.type.TypeReference<
+                                java.util.Map<String, Object>>() {}),
+                    InvocationContext.system())
                 .success())
         .isFalse();
     assertThat(
             provider
-                .callTool("webFetch", JSON.createObjectNode(), InvocationContext.system())
+                .callTool(
+                    "webFetch",
+                    new tools.jackson.databind.json.JsonMapper()
+                        .convertValue(
+                            JSON.createObjectNode(),
+                            new tools.jackson.core.type.TypeReference<
+                                java.util.Map<String, Object>>() {}),
+                    InvocationContext.system())
                 .success())
         .isFalse();
     verifyNoInteractions(client);
@@ -149,7 +163,11 @@ class WebFetchBoundaryTest {
               provider
                   .callTool(
                       "webFetch",
-                      JSON.createObjectNode().put("url", "https://example.org"),
+                      new tools.jackson.databind.json.JsonMapper()
+                          .convertValue(
+                              JSON.createObjectNode().put("url", "https://example.org"),
+                              new tools.jackson.core.type.TypeReference<
+                                  java.util.Map<String, Object>>() {}),
                       InvocationContext.system())
                   .success())
           .isTrue();
@@ -178,7 +196,12 @@ class WebFetchBoundaryTest {
   private void assertCode(WebFetchSeaProvider provider, String url, String code) {
     var result =
         provider.callTool(
-            "webFetch", JSON.createObjectNode().put("url", url), InvocationContext.system());
+            "webFetch",
+            new tools.jackson.databind.json.JsonMapper()
+                .convertValue(
+                    JSON.createObjectNode().put("url", url),
+                    new tools.jackson.core.type.TypeReference<java.util.Map<String, Object>>() {}),
+            InvocationContext.system());
     assertThat(result.success()).isFalse();
     assertThat(((Map<?, ?>) result.content()).get("code")).isEqualTo(code);
   }

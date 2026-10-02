@@ -1,4 +1,4 @@
-package org.zalava.webfetch;
+package org.zalava.modules.webfetch;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -14,14 +14,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import org.jsoup.Jsoup;
-import org.zalava.InvocationContext;
-import org.zalava.ProviderCapabilities;
-import org.zalava.ProviderDescriptor;
-import org.zalava.ZalavaOperationResult;
-import org.zalava.ZalavaProvider;
-import org.zalava.ZalavaToolDescriptor;
-import org.zalava.ZalavaToolInputSchemas;
-import tools.jackson.databind.JsonNode;
+import org.zalava.api.InvocationContext;
+import org.zalava.api.ProviderCapabilities;
+import org.zalava.api.ProviderDescriptor;
+import org.zalava.api.ZalavaOperationResult;
+import org.zalava.api.ZalavaProvider;
+import org.zalava.api.ZalavaToolDescriptor;
+import org.zalava.api.ZalavaToolInputSchemas;
 
 /** A read-only provider that fetches public textual HTTP(S) documents. */
 public final class WebFetchSeaProvider implements ZalavaProvider {
@@ -83,7 +82,9 @@ public final class WebFetchSeaProvider implements ZalavaProvider {
 
   @Override
   public ZalavaOperationResult callTool(
-      String toolName, JsonNode arguments, InvocationContext context) {
+      String toolName, java.util.Map<String, Object> argumentValues, InvocationContext context) {
+    tools.jackson.databind.JsonNode arguments =
+        new tools.jackson.databind.json.JsonMapper().valueToTree(argumentValues);
     if (!TOOL_NAME.equals(toolName)) {
       return failure("UNKNOWN_TOOL", "Unknown web fetch tool");
     }

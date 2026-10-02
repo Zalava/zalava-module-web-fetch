@@ -1,4 +1,4 @@
-package org.zalava.webfetch;
+package org.zalava.modules.webfetch;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -20,13 +20,13 @@ import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.zalava.InvocationContext;
-import org.zalava.ZalavaOperationResult;
-import org.zalava.ZalavaProvider;
-import org.zalava.ZalavaToolDescriptor;
-import org.zalava.testing.ConfigFixture;
-import org.zalava.testing.ModuleContractKit;
-import org.zalava.testing.ProviderFixture;
+import org.zalava.api.InvocationContext;
+import org.zalava.api.ZalavaOperationResult;
+import org.zalava.api.ZalavaProvider;
+import org.zalava.api.ZalavaToolDescriptor;
+import org.zalava.api.testing.ConfigFixture;
+import org.zalava.api.testing.ModuleContractKit;
+import org.zalava.api.testing.ProviderFixture;
 import tools.jackson.databind.node.JsonNodeFactory;
 import tools.jackson.databind.node.ObjectNode;
 
@@ -42,10 +42,10 @@ class WebFetchSeaModuleTest {
   private static final String FACTORY_ID = "web-fetch";
   private static final String PROVIDER_ID = "web-fetch";
   private static final String TOOL_NAME = "webFetch";
-  private static final String FETCH_LIMITS_TYPE = "org.zalava.webfetch.FetchLimits";
+  private static final String FETCH_LIMITS_TYPE = "org.zalava.modules.webfetch.FetchLimits";
   private static final String PUBLIC_ADDRESS_RESOLVER_TYPE =
-      "org.zalava.webfetch.PublicAddressResolver";
-  private static final String PROVIDER_TYPE = "org.zalava.webfetch.WebFetchSeaProvider";
+      "org.zalava.modules.webfetch.PublicAddressResolver";
+  private static final String PROVIDER_TYPE = "org.zalava.modules.webfetch.WebFetchSeaProvider";
 
   private ModuleContractKit kit;
   private HttpServer server;
@@ -215,14 +215,22 @@ class WebFetchSeaModuleTest {
             content(
                 provider.callTool(
                     TOOL_NAME,
-                    arguments().put("url", "file:///etc/passwd"),
+                    new tools.jackson.databind.json.JsonMapper()
+                        .convertValue(
+                            arguments().put("url", "file:///etc/passwd"),
+                            new tools.jackson.core.type.TypeReference<
+                                java.util.Map<String, Object>>() {}),
                     InvocationContext.system())))
         .containsEntry("code", "INVALID_URL");
     assertThat(
             content(
                 provider.callTool(
                     "notWebFetch",
-                    arguments().put("url", url("/text")),
+                    new tools.jackson.databind.json.JsonMapper()
+                        .convertValue(
+                            arguments().put("url", url("/text")),
+                            new tools.jackson.core.type.TypeReference<
+                                java.util.Map<String, Object>>() {}),
                     InvocationContext.system())))
         .containsEntry("code", "UNKNOWN_TOOL");
   }
@@ -274,7 +282,12 @@ class WebFetchSeaModuleTest {
 
   private ZalavaOperationResult fetch(ZalavaProvider provider, String path) {
     return provider.callTool(
-        TOOL_NAME, arguments().put("url", url(path)), InvocationContext.system());
+        TOOL_NAME,
+        new tools.jackson.databind.json.JsonMapper()
+            .convertValue(
+                arguments().put("url", url(path)),
+                new tools.jackson.core.type.TypeReference<java.util.Map<String, Object>>() {}),
+        InvocationContext.system());
   }
 
   private String url(String path) {

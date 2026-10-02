@@ -1,4 +1,4 @@
-package org.zalava.webfetch;
+package org.zalava.modules.webfetch;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

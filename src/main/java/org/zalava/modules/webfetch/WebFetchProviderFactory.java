@@ -1,11 +1,11 @@
-package org.zalava.webfetch;
+package org.zalava.modules.webfetch;
 
 import java.util.List;
 import java.util.Map;
-import org.zalava.ProviderFactory;
-import org.zalava.ProviderFactoryContext;
-import org.zalava.ProviderFactoryDescriptor;
-import org.zalava.ZalavaProvider;
+import org.zalava.api.ProviderFactory;
+import org.zalava.api.ProviderFactoryContext;
+import org.zalava.api.ProviderFactoryDescriptor;
+import org.zalava.api.ZalavaProvider;
 
 /** Creates the single configured bounded web-fetch provider. */
 public final class WebFetchProviderFactory implements ProviderFactory {
