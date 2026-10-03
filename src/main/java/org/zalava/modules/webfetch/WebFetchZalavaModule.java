@@ -8,8 +8,8 @@ import org.zalava.api.ModuleDescriptor;
 import org.zalava.api.ProviderFactory;
 import org.zalava.api.ZalavaModule;
 
-/** SEA module entry point for bounded, read-only web fetching. */
-public final class WebFetchSeaModule implements ZalavaModule {
+/** Zalava module entry point for bounded, read-only web fetching. */
+public final class WebFetchZalavaModule implements ZalavaModule {
 
   public static final String MODULE_ID = "zalava-module-web-fetch";
   static final String VERSION = moduleVersion();
@@ -19,7 +19,7 @@ public final class WebFetchSeaModule implements ZalavaModule {
     return new ModuleDescriptor(
         MODULE_ID,
         VERSION,
-        "SEA Web Fetch",
+        "Zalava Web Fetch",
         "Bounded HTTP(S) fetch and deterministic text extraction.");
   }
 
@@ -56,7 +56,7 @@ public final class WebFetchSeaModule implements ZalavaModule {
   }
 
   private static String moduleVersion() {
-    try (var stream = WebFetchSeaModule.class.getResourceAsStream("/module.properties")) {
+    try (var stream = WebFetchZalavaModule.class.getResourceAsStream("/module.properties")) {
       if (stream == null) throw new IllegalStateException("Missing module.properties");
       Properties properties = new Properties();
       properties.load(stream);

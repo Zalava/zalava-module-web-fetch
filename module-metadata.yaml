@@ -2,7 +2,7 @@ schemaVersion: 1
 modules:
   - moduleId: zalava-module-web-fetch
     version: 0.1.0-alpha.3
-    displayName: SEA Web Fetch
+    displayName: Zalava Web Fetch
     description: Bounded HTTP(S) fetch and deterministic text extraction.
     supportUrl: https://github.com/Zalava/zalava-module-web-fetch
     artifact:
@@ -16,7 +16,7 @@ modules:
       command: ["./gradlew", "build"]
       verificationCommand: ["./gradlew", "test"]
     compatibility:
-      seaRuntime: ">=1.0.0 <2.0.0"
+      zalavaRuntime: ">=1.0.0 <2.0.0"
     configurationSchema:
       type: object
       additionalProperties: false

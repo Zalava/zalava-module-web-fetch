@@ -23,7 +23,7 @@ import org.zalava.api.ZalavaToolDescriptor;
 import org.zalava.api.ZalavaToolInputSchemas;
 
 /** A read-only provider that fetches public textual HTTP(S) documents. */
-public final class WebFetchSeaProvider implements ZalavaProvider {
+public final class WebFetchZalavaProvider implements ZalavaProvider {
 
   static final String TOOL_NAME = "webFetch";
   private static final Set<Integer> REDIRECT_STATUSES = Set.of(301, 302, 303, 307, 308);
@@ -32,7 +32,7 @@ public final class WebFetchSeaProvider implements ZalavaProvider {
           TOOL_NAME,
           "Fetch a public HTTP(S) document with strict redirect, timeout, size, and content-type limits.",
           false,
-          List.of("sea_backed", "web-fetch", "network", "read-only"),
+          List.of("zalava_backed", "web-fetch", "network", "read-only"),
           ZalavaToolInputSchemas.object(Map.of("url", ZalavaToolInputSchemas.string()), "url"));
 
   private final FetchLimits limits;
@@ -40,14 +40,14 @@ public final class WebFetchSeaProvider implements ZalavaProvider {
   private final PublicAddressResolver addressResolver;
   private final ProviderDescriptor descriptor;
 
-  public WebFetchSeaProvider(FetchLimits limits) {
+  public WebFetchZalavaProvider(FetchLimits limits) {
     this(
         limits,
         HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER).build(),
         PublicAddressResolver.system());
   }
 
-  WebFetchSeaProvider(
+  WebFetchZalavaProvider(
       FetchLimits limits, HttpClient client, PublicAddressResolver addressResolver) {
     this.limits = limits;
     this.client = client;
@@ -55,13 +55,13 @@ public final class WebFetchSeaProvider implements ZalavaProvider {
     this.descriptor =
         new ProviderDescriptor(
             "web-fetch",
-            WebFetchSeaModule.MODULE_ID,
+            WebFetchZalavaModule.MODULE_ID,
             "web-fetch",
             "Web Fetch",
             "Bounded public HTTP(S) fetch and deterministic text extraction.",
-            WebFetchSeaModule.VERSION,
+            WebFetchZalavaModule.VERSION,
             ProviderCapabilities.toolsOnly(),
-            List.of("sea_backed", "web-fetch", "network", "read-only"),
+            List.of("zalava_backed", "web-fetch", "network", "read-only"),
             Map.of("network", "public-http(s)"));
   }
 
@@ -115,7 +115,7 @@ public final class WebFetchSeaProvider implements ZalavaProvider {
               .header(
                   "Accept",
                   "text/html, text/plain, application/json, application/xml, text/xml;q=0.9, */*;q=0.1")
-              .header("User-Agent", "zalava-module-web-fetch/" + WebFetchSeaModule.VERSION)
+              .header("User-Agent", "zalava-module-web-fetch/" + WebFetchZalavaModule.VERSION)
               .GET()
               .build();
       HttpResponse<InputStream> response =
