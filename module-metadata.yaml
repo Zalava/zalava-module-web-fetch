@@ -1,14 +1,14 @@
 schemaVersion: 1
 modules:
   - moduleId: zalava-module-web-fetch
-    version: 0.1.0-alpha.3
+    version: 0.1.0-alpha.4
     displayName: Zalava Web Fetch
     description: Bounded HTTP(S) fetch and deterministic text extraction.
     supportUrl: https://github.com/Zalava/zalava-module-web-fetch
     artifact:
       groupId: org.zalava.modules
       artifactId: zalava-module-web-fetch
-      version: 0.1.0-alpha.3
+      version: 0.1.0-alpha.4
     source:
       repository: https://github.com/Zalava/zalava-module-web-fetch.git
       license: Apache-2.0
