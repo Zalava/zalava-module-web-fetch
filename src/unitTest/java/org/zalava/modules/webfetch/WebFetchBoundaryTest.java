@@ -33,7 +33,7 @@ class WebFetchBoundaryTest {
   @Test
   void rejectsMalformedAndUnresolvableUrlsBeforeNetwork() throws Exception {
     HttpClient client = mock(HttpClient.class);
-    WebFetchSeaProvider provider =
+    WebFetchZalavaProvider provider =
         provider(
             client,
             host -> {
@@ -120,7 +120,7 @@ class WebFetchBoundaryTest {
   @Test
   void handlesRedirectStatusContentAndSizeBoundaries() throws Exception {
     HttpClient client = mock(HttpClient.class);
-    WebFetchSeaProvider provider = provider(client, host -> {});
+    WebFetchZalavaProvider provider = provider(client, host -> {});
     doReturn(response(302, Map.of(), new ByteArrayInputStream(new byte[0])))
         .when(client)
         .send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class));
@@ -188,12 +188,12 @@ class WebFetchBoundaryTest {
     assertCode(provider, "https://example.org", "HTTP_STATUS");
   }
 
-  private WebFetchSeaProvider provider(HttpClient client, PublicAddressResolver resolver) {
-    return new WebFetchSeaProvider(
+  private WebFetchZalavaProvider provider(HttpClient client, PublicAddressResolver resolver) {
+    return new WebFetchZalavaProvider(
         new FetchLimits(Duration.ofSeconds(1), 100, 1), client, resolver);
   }
 
-  private void assertCode(WebFetchSeaProvider provider, String url, String code) {
+  private void assertCode(WebFetchZalavaProvider provider, String url, String code) {
     var result =
         provider.callTool(
             "webFetch",

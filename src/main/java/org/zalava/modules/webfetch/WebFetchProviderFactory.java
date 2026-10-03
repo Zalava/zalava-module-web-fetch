@@ -16,7 +16,7 @@ public final class WebFetchProviderFactory implements ProviderFactory {
   public ProviderFactoryDescriptor descriptor() {
     return new ProviderFactoryDescriptor(
         FACTORY_ID,
-        WebFetchSeaModule.MODULE_ID,
+        WebFetchZalavaModule.MODULE_ID,
         "web-fetch",
         "Web Fetch",
         "Fetches public HTTP(S) documents within fixed response bounds.");
@@ -25,6 +25,6 @@ public final class WebFetchProviderFactory implements ProviderFactory {
   @Override
   public List<ZalavaProvider> createProviders(ProviderFactoryContext context) {
     Map<String, Object> configuration = context == null ? Map.of() : context.configuration();
-    return List.of(new WebFetchSeaProvider(FetchLimits.from(configuration)));
+    return List.of(new WebFetchZalavaProvider(FetchLimits.from(configuration)));
   }
 }

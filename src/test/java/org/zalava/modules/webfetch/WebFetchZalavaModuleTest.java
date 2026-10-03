@@ -34,9 +34,9 @@ import tools.jackson.databind.node.ObjectNode;
  * Exercises the real built module JAR at the stable {@code module-api} boundary through the
  * released contract kit. A loopback {@code HttpServer} stands in for the public internet and the
  * provider's address policy is replaced with a test double so no external request is made.
- * Host-owned resolution, validation, permissions and persistence stay covered by SEA.
+ * Host-owned resolution, validation, permissions and persistence stay covered by Zalava.
  */
-class WebFetchSeaModuleTest {
+class WebFetchZalavaModuleTest {
 
   private static final String MODULE_ID = "zalava-module-web-fetch";
   private static final String FACTORY_ID = "web-fetch";
@@ -45,7 +45,7 @@ class WebFetchSeaModuleTest {
   private static final String FETCH_LIMITS_TYPE = "org.zalava.modules.webfetch.FetchLimits";
   private static final String PUBLIC_ADDRESS_RESOLVER_TYPE =
       "org.zalava.modules.webfetch.PublicAddressResolver";
-  private static final String PROVIDER_TYPE = "org.zalava.modules.webfetch.WebFetchSeaProvider";
+  private static final String PROVIDER_TYPE = "org.zalava.modules.webfetch.WebFetchZalavaProvider";
 
   private ModuleContractKit kit;
   private HttpServer server;
@@ -112,7 +112,7 @@ class WebFetchSeaModuleTest {
   void exposesTheModuleOwnedDescriptorAndConfigurationContract() {
     assertThat(kit.moduleId()).isEqualTo(MODULE_ID);
     assertThat(kit.version()).isEqualTo(System.getProperty("module.version"));
-    assertThat(kit.module().descriptor().displayName()).isEqualTo("SEA Web Fetch");
+    assertThat(kit.module().descriptor().displayName()).isEqualTo("Zalava Web Fetch");
 
     Map<String, Object> schema = kit.module().configuration().jsonSchema();
     assertThat(schema).containsEntry("type", "object").containsEntry("additionalProperties", false);
