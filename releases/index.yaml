@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "moduleId": "zalava-module-web-fetch",
+  "releases": [
+    {
+      "version": "0.1.0-alpha.4",
+      "releaseTag": "v0.1.0-alpha.4",
+      "artifact": {
+        "groupId": "org.zalava.modules",
+        "artifactId": "zalava-module-web-fetch",
+        "version": "0.1.0-alpha.4",
+        "sha256": "f8adc02b5712dd19af145aa16712c498b9f480c9b876e4d3479663ea290123d6",
+        "type": "github-release-assets",
+        "repositoryUri": "https://github.com/Zalava/zalava-module-web-fetch",
+        "releaseTag": "v0.1.0-alpha.4",
+        "assetName": "zalava-module-web-fetch-0.1.0-alpha.4.jar"
+      },
+      "artifactBundle": false,
+      "source": {
+        "repository": "https://github.com/Zalava/zalava-module-web-fetch.git",
+        "revision": "8e18d37b9c4a036c5d7b69bec56f2736e4eb09e5",
+        "license": "Apache-2.0"
+      },
+      "compatibility": {
+        "zalavaRuntime": ">=1.0.0 <2.0.0"
+      },
+      "security": {
+        "permissions": [
+          "network-http"
+        ]
+      }
+    }
+  ]
+}
